@@ -1,10 +1,6 @@
 name: C/C++ CI
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -13,11 +9,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: install deps
+      run: sudo apt-get install php-dev
+    - name: phpize
+      run: phpize
     - name: configure
       run: ./configure
     - name: make
       run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
+    - name: make test
+      run: make test
+
