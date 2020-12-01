@@ -14,10 +14,12 @@ dnl [  --with-ext             Include ext support])
 dnl Otherwise use enable:
 
 PHP_ARG_ENABLE(ext, whether to enable ext support,
-dnl Make sure that the comment is aligned:
+Make sure that the comment is aligned:
 [  --enable-ext           Enable ext support])
 
 if test "$PHP_EXT" != "no"; then
+  sinclude(version-lib.m4)
+  sinclude(config-lib.m4)
   dnl Write more examples of tests here...
 
   dnl # get library FOO build options from pkg-config output
@@ -63,7 +65,7 @@ if test "$PHP_EXT" != "no"; then
 
   dnl # --with-ext -> check for lib and symbol presence
   dnl LIBNAME=ext # you may want to change this
-  dnl LIBSYMBOL=ext # you most likely want to change this 
+  dnl LIBSYMBOL=ext # you most likely want to change this
 
   dnl PHP_CHECK_LIBRARY($LIBNAME,$LIBSYMBOL,
   dnl [
@@ -77,5 +79,9 @@ if test "$PHP_EXT" != "no"; then
   dnl
   dnl PHP_SUBST(EXT_SHARED_LIBADD)
 
-  PHP_NEW_EXTENSION(ext, ext.c, $ext_shared,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)
+  if test  $PHP_MAJOR_VERSION -eq 5; then
+    PHP_NEW_EXTENSION(ext, ext5.c, $ext_shared)
+  else
+    PHP_NEW_EXTENSION(ext, ext.c, $ext_shared,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)
+  fi
 fi

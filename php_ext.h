@@ -1,8 +1,8 @@
 /*
   +----------------------------------------------------------------------+
-  | PHP Version 7                                                        |
+  | PHP Version 5                                                        |
   +----------------------------------------------------------------------+
-  | Copyright (c) 1997-2018 The PHP Group                                |
+  | Copyright (c) 1997-2015 The PHP Group                                |
   +----------------------------------------------------------------------+
   | This source file is subject to version 3.01 of the PHP license,      |
   | that is bundled with this package in the file LICENSE, and is        |
@@ -38,27 +38,42 @@ extern zend_module_entry ext_module_entry;
 #include "TSRM.h"
 #endif
 
-/*
+PHP_MINIT_FUNCTION(ext);
+PHP_MSHUTDOWN_FUNCTION(ext);
+PHP_RINIT_FUNCTION(ext);
+PHP_RSHUTDOWN_FUNCTION(ext);
+PHP_MINFO_FUNCTION(ext);
+
+PHP_FUNCTION(confirm_ext_compiled);	/* For testing, remove later. */
+
+/* 
   	Declare any global variables you may need between the BEGIN
-	and END macros here:
+	and END macros here:     
 
 ZEND_BEGIN_MODULE_GLOBALS(ext)
-	zend_long  global_value;
+	long  global_value;
 	char *global_string;
 ZEND_END_MODULE_GLOBALS(ext)
 */
 
-/* Always refer to the globals in your function as EXT_G(variable).
-   You are encouraged to rename these macros something shorter, see
+/* In every utility function you add that needs to use variables 
+   in php_ext_globals, call TSRMLS_FETCH(); after declaring other 
+   variables used by that function, or better yet, pass in TSRMLS_CC
+   after the last function argument and declare your utility function
+   with TSRMLS_DC after the last declared argument.  Always refer to
+   the globals in your function as EXT_G(variable).  You are 
+   encouraged to rename these macros something shorter, see
    examples in any other php module directory.
 */
-#define EXT_G(v) ZEND_MODULE_GLOBALS_ACCESSOR(ext, v)
 
-#if defined(ZTS) && defined(COMPILE_DL_EXT)
-ZEND_TSRMLS_CACHE_EXTERN()
+#ifdef ZTS
+#define EXT_G(v) TSRMG(ext_globals_id, zend_ext_globals *, v)
+#else
+#define EXT_G(v) (ext_globals.v)
 #endif
 
 #endif	/* PHP_EXT_H */
+
 
 /*
  * Local variables:
