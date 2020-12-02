@@ -1,4 +1,4 @@
-name: php7
+name: ubuntu official php
 
 on: [push, pull_request]
 
