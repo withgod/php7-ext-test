@@ -1,0 +1,16 @@
+FROM php:5.5-cli
+
+SHELL ["/bin/bash", "-c"]
+
+RUN apt-get -y update && \
+        apt-get install -y build-essential libpng-dev libgif-dev
+COPY . /tmp/ext
+
+WORKDIR /tmp/ext
+
+RUN make clean && phpize --clean
+RUN phpize && ./configure && make
+RUN ls -al ./modules
+
+CMD make test NO_INTERACTION=1 TESTS=--show-diff
+
