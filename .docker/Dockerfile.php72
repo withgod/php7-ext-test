@@ -8,7 +8,7 @@ COPY . /tmp/ext
 
 WORKDIR /tmp/ext
 
-RUN make clean && phpize --clean
+#RUN make clean && phpize --clean
 RUN phpize && ./configure && make
 RUN ls -al ./modules
 
