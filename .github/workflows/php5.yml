@@ -9,6 +9,6 @@ jobs:
     - uses: actions/checkout@v2
     - name: Setup docker container
       run: docker build -t ext -f ./.docker/Dockerfile.php55 .
-    - name: phpize
-      run: docker run -it --rm ext:lates
+    - name: run test
+      run: docker run --rm ext:lates
 
