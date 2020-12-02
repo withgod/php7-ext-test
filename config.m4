@@ -19,7 +19,6 @@ Make sure that the comment is aligned:
 
 if test "$PHP_EXT" != "no"; then
   sinclude(version-lib.m4)
-  sinclude(config-lib.m4)
   dnl Write more examples of tests here...
 
   dnl # get library FOO build options from pkg-config output
